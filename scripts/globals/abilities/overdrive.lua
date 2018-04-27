@@ -9,9 +9,6 @@ require("scripts/globals/settings")
 require("scripts/globals/status")
 require("scripts/globals/pets")
 require("scripts/globals/msg");
-
------------------------------------
--- onAbilityCheck
 -----------------------------------
 
 function onAbilityCheck(player,target,ability)
@@ -24,11 +21,7 @@ function onAbilityCheck(player,target,ability)
     end
 end
 
------------------------------------
--- onUseAbility
------------------------------------
-
 function onUseAbility(player,target,ability)
-    player:addStatusEffect(EFFECT_OVERDRIVE, 0, 0, 60)
-    return EFFECT_OVERDRIVE
+    player:addStatusEffect(dsp.effects.OVERDRIVE, 0, 0, 60)
+    return dsp.effects.OVERDRIVE
 end

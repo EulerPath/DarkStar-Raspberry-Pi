@@ -3,15 +3,11 @@
 -- Consumes a Thunder Card to enhance lightning-based debuffs. Deals lightning-based magic damage
 -- Shock Effect: Enhanced DoT and MND-
 -----------------------------------
-
 require("scripts/globals/settings");
 require("scripts/globals/status");
 require("scripts/globals/magic");
 require("scripts/globals/weaponskills");
 require("scripts/globals/ability");
-
------------------------------------
--- onAbilityCheck
 -----------------------------------
 
 function onAbilityCheck(player,target,ability)
@@ -26,10 +22,6 @@ function onAbilityCheck(player,target,ability)
         return 71, 0;
     end
 end;
-
------------------------------------
--- onUseAbility
------------------------------------
 
 function onUseAbility(player,target,ability,action)
     local params = {};
@@ -49,12 +41,12 @@ function onUseAbility(player,target,ability,action)
     if shadowsAbsorbed == 0 then
         local effects = {};
         local counter = 1;
-        local shock = target:getStatusEffect(EFFECT_SHOCK);
+        local shock = target:getStatusEffect(dsp.effects.SHOCK);
         if (shock ~= nil) then
             effects[counter] = shock;
             counter = counter + 1;
         end
-        local threnody = target:getStatusEffect(EFFECT_THRENODY);
+        local threnody = target:getStatusEffect(dsp.effects.THRENODY);
         if (threnody ~= nil and threnody:getSubPower() == MOD_WATERRES) then
             effects[counter] = threnody;
             counter = counter + 1;

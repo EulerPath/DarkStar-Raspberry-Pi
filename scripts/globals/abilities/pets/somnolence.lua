@@ -1,7 +1,6 @@
 ---------------------------------------------------
 -- Somnolence
 ---------------------------------------------------
-
 require("scripts/globals/settings");
 require("scripts/globals/status");
 require("scripts/globals/monstertpmoves");
@@ -28,8 +27,8 @@ function onPetAbility(target, pet, skill)
 
     duration = duration * resist;
 
-    if (duration > 0 and target:hasStatusEffect(EFFECT_WEIGHT) == false) then
-        target:addStatusEffect(EFFECT_WEIGHT, 50, 0, duration);
+    if (duration > 0 and target:hasStatusEffect(dsp.effects.WEIGHT) == false) then
+        target:addStatusEffect(dsp.effects.WEIGHT, 50, 0, duration);
     end
 
     return dmg;

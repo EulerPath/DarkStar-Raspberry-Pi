@@ -1,7 +1,6 @@
 ---------------------------------------------------
 -- Bone Crusher
 ---------------------------------------------------
-
 require("scripts/globals/status")
 require("scripts/globals/settings")
 require("scripts/globals/automatonweaponskills")
@@ -10,7 +9,7 @@ require("scripts/globals/automatonweaponskills")
 
 function onMobSkillCheck(target, automaton, skill)
     local master = automaton:getMaster()
-    return master:countEffect(EFFECT_LIGHT_MANEUVER)
+    return master:countEffect(dsp.effects.LIGHT_MANEUVER)
 end
 
 function onPetAbility(target, automaton, skill, master, action)
@@ -56,8 +55,8 @@ function onPetAbility(target, automaton, skill, master, action)
 
     if damage > 0 then
         local chance = 0.033 * skill:getTP()
-        if not target:hasStatusEffect(EFFECT_STUN) and chance >= math.random()*100 then
-            target:addStatusEffect(EFFECT_STUN, 1, 0, 4)
+        if not target:hasStatusEffect(dsp.effects.STUN) and chance >= math.random()*100 then
+            target:addStatusEffect(dsp.effects.STUN, 1, 0, 4)
         end
     end
 

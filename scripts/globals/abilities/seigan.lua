@@ -8,9 +8,6 @@
 require("scripts/globals/settings");
 require("scripts/globals/status");
 require("scripts/globals/msg");
-
------------------------------------
--- onAbilityCheck
 -----------------------------------
 
 function onAbilityCheck(player,target,ability)
@@ -21,14 +18,10 @@ function onAbilityCheck(player,target,ability)
     end
 end;
 
------------------------------------
--- onUseAbility
------------------------------------
-
 function onUseAbility(player,target,ability)
     if (target:isWeaponTwoHanded()) then
-        target:delStatusEffect(EFFECT_HASSO);
-        target:delStatusEffect(EFFECT_SEIGAN);
-        target:addStatusEffect(EFFECT_SEIGAN,0,0,300);
+        target:delStatusEffect(dsp.effects.HASSO);
+        target:delStatusEffect(dsp.effects.SEIGAN);
+        target:addStatusEffect(dsp.effects.SEIGAN,0,0,300);
     end
 end;

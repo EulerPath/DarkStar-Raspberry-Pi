@@ -3,15 +3,11 @@
 -- Consumes a Water Card to enhance water-based debuffs. Deals water-based magic damage
 -- Drown Effect: Enhanced DoT and STR-
 -----------------------------------
-
 require("scripts/globals/settings");
 require("scripts/globals/status");
 require("scripts/globals/magic");
 require("scripts/globals/weaponskills");
 require("scripts/globals/ability");
-
------------------------------------
--- onAbilityCheck
 -----------------------------------
 
 function onAbilityCheck(player,target,ability)
@@ -26,10 +22,6 @@ function onAbilityCheck(player,target,ability)
         return 71, 0;
     end
 end;
-
------------------------------------
--- onUseAbility
------------------------------------
 
 function onUseAbility(player,target,ability,action)
     local params = {};
@@ -49,17 +41,17 @@ function onUseAbility(player,target,ability,action)
     if shadowsAbsorbed == 0 then
         local effects = {};
         local counter = 1;
-        local drown = target:getStatusEffect(EFFECT_DROWN);
+        local drown = target:getStatusEffect(dsp.effects.DROWN);
         if (drown ~= nil) then
             effects[counter] = drown;
             counter = counter + 1;
         end
-        local poison = target:getStatusEffect(EFFECT_POISON);
+        local poison = target:getStatusEffect(dsp.effects.POISON);
         if (poison ~= nil) then
             effects[counter] = poison;
             counter = counter + 1;
         end
-        local threnody = target:getStatusEffect(EFFECT_THRENODY);
+        local threnody = target:getStatusEffect(dsp.effects.THRENODY);
         if (threnody ~= nil and threnody:getSubPower() == MOD_FIRERES) then
             effects[counter] = threnody;
             counter = counter + 1;

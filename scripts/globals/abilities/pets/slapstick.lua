@@ -1,7 +1,6 @@
 ---------------------------------------------------
 -- Slapstick
 ---------------------------------------------------
-
 require("scripts/globals/status")
 require("scripts/globals/settings")
 require("scripts/globals/automatonweaponskills")
@@ -10,7 +9,7 @@ require("scripts/globals/automatonweaponskills")
 
 function onMobSkillCheck(target, automaton, skill)
     local master = automaton:getMaster()
-    return master:countEffect(EFFECT_THUNDER_MANEUVER)
+    return master:countEffect(dsp.effects.THUNDER_MANEUVER)
 end
 
 function onPetAbility(target, automaton, skill, master, action)

@@ -33,18 +33,18 @@ function onGameIn(player, firstlogin, zoning)
 
     if (player:getVar("GodMode") == 1) then
         -- Add bonus effects to the player..
-        player:addStatusEffect(EFFECT_MAX_HP_BOOST,1000,0,0);
-        player:addStatusEffect(EFFECT_MAX_MP_BOOST,1000,0,0);
-        player:addStatusEffect(EFFECT_MIGHTY_STRIKES,1,0,0);
-        player:addStatusEffect(EFFECT_HUNDRED_FISTS,1,0,0);
-        player:addStatusEffect(EFFECT_CHAINSPELL,1,0,0);
-        player:addStatusEffect(EFFECT_PERFECT_DODGE,1,0,0);
-        player:addStatusEffect(EFFECT_INVINCIBLE,1,0,0);
-        player:addStatusEffect(EFFECT_ELEMENTAL_SFORZO,1,0,0);
-        player:addStatusEffect(EFFECT_MANAFONT,1,0,0);
-        player:addStatusEffect(EFFECT_REGAIN,300,0,0);
-        player:addStatusEffect(EFFECT_REFRESH,99,0,0);
-        player:addStatusEffect(EFFECT_REGEN,99,0,0);
+        player:addStatusEffect(dsp.effects.MAX_HP_BOOST,1000,0,0);
+        player:addStatusEffect(dsp.effects.MAX_MP_BOOST,1000,0,0);
+        player:addStatusEffect(dsp.effects.MIGHTY_STRIKES,1,0,0);
+        player:addStatusEffect(dsp.effects.HUNDRED_FISTS,1,0,0);
+        player:addStatusEffect(dsp.effects.CHAINSPELL,1,0,0);
+        player:addStatusEffect(dsp.effects.PERFECT_DODGE,1,0,0);
+        player:addStatusEffect(dsp.effects.INVINCIBLE,1,0,0);
+        player:addStatusEffect(dsp.effects.ELEMENTAL_SFORZO,1,0,0);
+        player:addStatusEffect(dsp.effects.MANAFONT,1,0,0);
+        player:addStatusEffect(dsp.effects.REGAIN,300,0,0);
+        player:addStatusEffect(dsp.effects.REFRESH,99,0,0);
+        player:addStatusEffect(dsp.effects.REGEN,99,0,0);
 
         -- Add bonus mods to the player..
         player:addMod(MOD_RACC,2500);
@@ -240,7 +240,7 @@ function CharCreate(player)
             if ((race == 3) or (race == 4))
                 then player:addItem(0x34B7);
             end;
-            player:addKeyItem(MAP_OF_THE_SAN_DORIA_AREA);
+            player:addKeyItem(dsp.kis.MAP_OF_THE_SAN_DORIA_AREA);
         end,
 
         -- BASTOK CITIZEN
@@ -248,7 +248,7 @@ function CharCreate(player)
             if (((race == 1) or (race == 2) or (race == 8)))
                 then player:addItem(0x34B9);
             end;
-            player:addKeyItem(MAP_OF_THE_BASTOK_AREA);
+            player:addKeyItem(dsp.kis.MAP_OF_THE_BASTOK_AREA);
         end,
 
         -- WINDY CITIZEN
@@ -256,7 +256,7 @@ function CharCreate(player)
             if (((race == 5) or (race == 6) or (race == 7)))
                 then player:addItem(0x34B8);
             end;
-            player:addKeyItem(MAP_OF_THE_WINDURST_AREA);
+            player:addKeyItem(dsp.kis.MAP_OF_THE_WINDURST_AREA);
         end,
 
         default = function (x) end,

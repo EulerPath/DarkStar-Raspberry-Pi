@@ -8,24 +8,17 @@
 require("scripts/globals/settings");
 require("scripts/globals/status");
 require("scripts/globals/msg");
-
------------------------------------
--- onAbilityCheck
 -----------------------------------
 
 function onAbilityCheck(player,target,ability)
-    if player:hasStatusEffect(EFFECT_APOGEE) then
+    if player:hasStatusEffect(dsp.effects.APOGEE) then
         return msgBasic.EFFECT_ALREADY_ACTIVE, 0;
     end
     return 0,0;
 end;
 
------------------------------------
--- onUseAbility
------------------------------------
-
 function onUseAbility(player,target,ability)
-    player:addStatusEffect(EFFECT_APOGEE,1,0,60);
+    player:addStatusEffect(dsp.effects.APOGEE,1,0,60);
 
-    return EFFECT_APOGEE;
+    return dsp.effects.APOGEE;
 end;

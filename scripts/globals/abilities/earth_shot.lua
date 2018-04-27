@@ -3,15 +3,11 @@
 -- Consumes a Earth Card to enhance earth-based debuffs. Deals earth-based magic damage
 -- Rasp Effect: Enhanced DoT and DEX-, Slow Effect +10%
 -----------------------------------
-
 require("scripts/globals/settings");
 require("scripts/globals/status");
 require("scripts/globals/magic");
 require("scripts/globals/weaponskills");
 require("scripts/globals/ability");
-
------------------------------------
--- onAbilityCheck
 -----------------------------------
 
 function onAbilityCheck(player,target,ability)
@@ -26,10 +22,6 @@ function onAbilityCheck(player,target,ability)
         return 71, 0;
     end
 end;
-
------------------------------------
--- onUseAbility
------------------------------------
 
 function onUseAbility(player,target,ability,action)
     local params = {};
@@ -51,17 +43,17 @@ function onUseAbility(player,target,ability,action)
     
         local effects = {};
         local counter = 1;
-        local rasp = target:getStatusEffect(EFFECT_RASP);
+        local rasp = target:getStatusEffect(dsp.effects.RASP);
         if (rasp ~= nil) then
             effects[counter] = rasp;
             counter = counter + 1;
         end
-        local threnody = target:getStatusEffect(EFFECT_THRENODY);
+        local threnody = target:getStatusEffect(dsp.effects.THRENODY);
         if (threnody ~= nil and threnody:getSubPower() == MOD_THUNDERRES) then
             effects[counter] = threnody;
             counter = counter + 1;
         end
-        local slow = target:getStatusEffect(EFFECT_SLOW);
+        local slow = target:getStatusEffect(dsp.effects.SLOW);
         if (slow ~= nil) then
             effects[counter] = slow;
             counter = counter + 1;

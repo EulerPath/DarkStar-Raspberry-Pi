@@ -7,9 +7,6 @@
 -----------------------------------
 require("scripts/globals/status");
 require("scripts/globals/msg");
-
------------------------------------
--- onAbilityCheck
 -----------------------------------
 
 function onAbilityCheck(player,target,ability)
@@ -22,11 +19,7 @@ function onAbilityCheck(player,target,ability)
     end
 end;
 
------------------------------------
--- onUseAbility
------------------------------------
-
 function onUseAbility(player,target,ability)
    local wyvern = player:getPet();
-   wyvern:addStatusEffect(EFFECT_MAGIC_ATK_BOOST,0,0,180); -- Message when effect is lost is "Magic Attack boost wears off."
+   wyvern:addStatusEffect(dsp.effects.MAGIC_ATK_BOOST,0,0,180); -- Message when effect is lost is "Magic Attack boost wears off."
 end;

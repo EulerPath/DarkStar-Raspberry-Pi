@@ -3,15 +3,11 @@
 -- Consumes a Wind Card to enhance wind-based debuffs. Deals wind-based magic damage
 -- Choke Effect: Enhanced DoT and VIT-
 -----------------------------------
-
 require("scripts/globals/settings");
 require("scripts/globals/status");
 require("scripts/globals/magic");
 require("scripts/globals/weaponskills");
 require("scripts/globals/ability");
-
------------------------------------
--- onAbilityCheck
 -----------------------------------
 
 function onAbilityCheck(player,target,ability)
@@ -26,10 +22,6 @@ function onAbilityCheck(player,target,ability)
         return 71, 0;
     end
 end;
-
------------------------------------
--- onUseAbility
------------------------------------
 
 function onUseAbility(player,target,ability,action)
     local params = {};
@@ -49,18 +41,18 @@ function onUseAbility(player,target,ability,action)
     if shadowsAbsorbed == 0 then
         local effects = {};
         local counter = 1;
-        local choke = target:getStatusEffect(EFFECT_CHOKE);
+        local choke = target:getStatusEffect(dsp.effects.CHOKE);
         if (choke ~= nil) then
             effects[counter] = choke;
             counter = counter + 1;
         end
-        local threnody = target:getStatusEffect(EFFECT_THRENODY);
+        local threnody = target:getStatusEffect(dsp.effects.THRENODY);
         if (threnody ~= nil and threnody:getSubPower() == MOD_EARTHRES) then
             effects[counter] = threnody;
             counter = counter + 1;
         end
         --TODO: Frightful Roar
-        --[[local frightfulRoar = target:getStatusEffect(EFFECT_);
+        --[[local frightfulRoar = target:getStatusEffect(dsp.effects.);
         if (frightfulRoar ~= nil) then
             effects[counter] = frightfulRoar;
             counter = counter + 1;

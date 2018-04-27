@@ -1,6 +1,6 @@
 -----------------------------------
 -- Ability: Fold
--- Erases one roll or bust effect. Targets self-cast effect with the longest remaining duration.
+-- Erases one roll or bust dsp.effects. Targets self-cast effect with the longest remaining duration.
 -- Obtained: Corsair Level 75
 -- Recast Time: 00:05:00
 -- Duration: Instant
@@ -8,9 +8,6 @@
 require("scripts/globals/settings");
 require("scripts/globals/status");
 require("scripts/globals/msg");
-
------------------------------------
--- onAbilityCheck
 -----------------------------------
 
 function onAbilityCheck(player,target,ability)
@@ -20,10 +17,6 @@ function onAbilityCheck(player,target,ability)
         return msgBasic.CANNOT_PERFORM,0;
     end
 end;
-
------------------------------------
--- onUseAbility
------------------------------------
 
 function onUseAbility(player,target,ability)
     target:fold();
@@ -35,5 +28,5 @@ function onUseAbility(player,target,ability)
         target:resetRecast(RECAST_ABILITY,193);
     end
 
-    return EFFECT_FOLD;
+    return dsp.effects.FOLD;
 end;

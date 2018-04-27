@@ -16,24 +16,17 @@
 require("scripts/globals/settings");
 require("scripts/globals/status");
 require("scripts/globals/msg");
-
------------------------------------
--- onAbilityCheck
 -----------------------------------
 
 function onAbilityCheck(player,target,ability)
-    if player:hasStatusEffect(EFFECT_EQUANIMITY) then
+    if player:hasStatusEffect(dsp.effects.EQUANIMITY) then
         return msgBasic.EFFECT_ALREADY_ACTIVE, 0;
     end
     return 0,0;
 end;
 
------------------------------------
--- onUseAbility
------------------------------------
-
 function onUseAbility(player,target,ability)
-    player:addStatusEffect(EFFECT_EQUANIMITY,player:getMerit(MERIT_EQUANIMITY),0,60);
+    player:addStatusEffect(dsp.effects.EQUANIMITY,player:getMerit(MERIT_EQUANIMITY),0,60);
 
-    return EFFECT_EQUANIMITY;
+    return dsp.effects.EQUANIMITY;
 end;

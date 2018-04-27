@@ -16,24 +16,17 @@
 require("scripts/globals/settings");
 require("scripts/globals/status");
 require("scripts/globals/msg");
-
------------------------------------
--- onAbilityCheck
 -----------------------------------
 
 function onAbilityCheck(player,target,ability)
-    if player:hasStatusEffect(EFFECT_PARSIMONY) then
+    if player:hasStatusEffect(dsp.effects.PARSIMONY) then
         return msgBasic.EFFECT_ALREADY_ACTIVE, 0;
     end
     return 0,0;
 end;
 
------------------------------------
--- onUseAbility
------------------------------------
-
 function onUseAbility(player,target,ability)
-    player:addStatusEffect(EFFECT_PARSIMONY,1,0,60);
+    player:addStatusEffect(dsp.effects.PARSIMONY,1,0,60);
 
-    return EFFECT_PARSIMONY;
+    return dsp.effects.PARSIMONY;
 end;

@@ -2232,8 +2232,14 @@ namespace battleutils
         if (!isRanged)
             PChar->StatusEffectContainer->DelStatusEffectsByFlag(EFFECTFLAG_ATTACK);
 
-        // Apply TP 
+        // Apply TP
         PChar->addTP(std::max((PChar->getMod(Mod::SAVETP)), standbyTp));
+
+        // Remove Hagakure Effect if present
+        if (PChar->StatusEffectContainer->HasStatusEffect(EFFECT_HAGAKURE))
+        {
+            PChar->StatusEffectContainer->DelStatusEffect(EFFECT_HAGAKURE);
+        }
 
         return damage;
     }
@@ -2686,11 +2692,13 @@ namespace battleutils
         //utsus always overwrites blink, so if utsus>0 then we know theres no blink.
         uint16 Shadow = PDefender->getMod(Mod::UTSUSEMI);
         Mod modShadow = Mod::UTSUSEMI;
-        if (Shadow == 0) {
+        if (Shadow == 0)
+        {
             Shadow = PDefender->getMod(Mod::BLINK);
             modShadow = Mod::BLINK;
             //random chance, assume 80% proc
-            if (dsprand::GetRandomNumber(100) < 20) {
+            if (dsprand::GetRandomNumber(100) < 20)
+            {
                 return false;
             }
         }
@@ -2701,7 +2709,8 @@ namespace battleutils
 
             if (Shadow == 0)
             {
-                switch (modShadow) {
+                switch (modShadow)
+                {
                     case Mod::UTSUSEMI:
                         PDefender->StatusEffectContainer->DelStatusEffect(EFFECT_COPY_IMAGE);
                         break;
@@ -2716,12 +2725,12 @@ namespace battleutils
             {
                 if (PDefender->objtype == TYPE_PC)
                 {
-                    CStatusEffect* PStatusEffect = PDefender->StatusEffectContainer->GetStatusEffect(EFFECT_COPY_IMAGE, 0);
+                    CStatusEffect* PStatusEffect = PDefender->StatusEffectContainer->GetStatusEffect(EFFECT_COPY_IMAGE);
 
                     if (PStatusEffect != nullptr)
                     {
                         uint16 icon = EFFECT_COPY_IMAGE_3;
-                        switch (PDefender->getMod(Mod::UTSUSEMI))
+                        switch (Shadow)
                         {
                             case 1: icon = EFFECT_COPY_IMAGE_1; break;
                             case 2: icon = EFFECT_COPY_IMAGE_2; break;
@@ -4289,15 +4298,26 @@ namespace battleutils
         }
     }
 
-    void HandleTacticalParry(CBattleEntity* PEntity) {
-        for (uint8 j = 0; j < PEntity->TraitList.size(); ++j)
+    void HandleTacticalParry(CBattleEntity* PEntity)
+    {
+        if (CCharEntity* PChar = dynamic_cast<CCharEntity*>(PEntity))
         {
-            CTrait* PExistingTrait = PEntity->TraitList.at(j);
+            if (charutils::hasTrait(PChar, TRAIT_TACTICAL_PARRY))
+            {
+                int16 tpBonus = PChar->getMod(Mod::TACTICAL_PARRY);
+                PChar->addTP(tpBonus);
+            }
+        }
+    }
 
-            if (PExistingTrait->getID() == TRAIT_TACTICAL_PARRY) {
-                int16 tpBonus = PEntity->getMod(Mod::TACTICAL_PARRY);
-                //ShowDebug(CL_CYAN"HandleTacticalParry: Tactical Parry Tp Bonus = %d\n" CL_RESET, tpBonus);
-                PEntity->addTP(tpBonus);
+    void HandleTacticalGuard(CBattleEntity* PEntity)
+    {
+        if (CCharEntity* PChar = dynamic_cast<CCharEntity*>(PEntity))
+        {
+            if (charutils::hasTrait(PChar, TRAIT_TACTICAL_GUARD))
+            {
+                int16 tpBonus = PChar->getMod(Mod::TACTICAL_GUARD);
+                PChar->addTP(tpBonus);
             }
         }
     }
@@ -4658,9 +4678,13 @@ namespace battleutils
             return false;
         }
 
+        bool success = false;
         float drawInDistance = (float)(PMob->getMobMod(MOBMOD_DRAW_IN) > 1 ? PMob->getMobMod(MOBMOD_DRAW_IN) : PMob->GetMeleeRange() * 2);
 
-        std::function <void(CBattleEntity*)> drawInFunc = [PMob, drawInDistance, nearEntity](CBattleEntity* PMember)
+        if (std::chrono::time_point_cast<std::chrono::seconds>(server_clock::now()).time_since_epoch().count() - PMob->GetLocalVar("DrawInTime") < 2)
+            return false;
+
+        std::function <void(CBattleEntity*)> drawInFunc = [PMob, drawInDistance, &nearEntity, &success](CBattleEntity* PMember)
         {
             float pDistance = distance(PMob->loc.p, PMember->loc.p);
 
@@ -4668,7 +4692,7 @@ namespace battleutils
             {
                 // don't draw in dead players for now!
                 // see tractor
-                if (PMember->isDead() || PMember->animation == ANIMATION_CHOCOBO)
+                if (PMember->isDead() || PMember->isMounted())
                 {
                     // don't do anything
                 }
@@ -4692,6 +4716,7 @@ namespace battleutils
 
                     luautils::OnMobDrawIn(PMob, PMember);
                     PMob->loc.zone->PushPacket(PMob, CHAR_INRANGE, new CMessageBasicPacket(PMember, PMember, 0, 0, 232));
+                    success = true;
                 }
             }
         };
@@ -4707,7 +4732,10 @@ namespace battleutils
             drawInFunc(PEntity);
         }
 
-        return true;
+        if (success)
+            PMob->SetLocalVar("DrawInTime", (uint32)std::chrono::time_point_cast<std::chrono::seconds>(server_clock::now()).time_since_epoch().count());
+
+        return success;
     }
 
     /************************************************************************
@@ -4876,6 +4904,8 @@ namespace battleutils
 
     void AddTraits(CBattleEntity* PEntity, TraitList_t* traitList, uint8 level)
     {
+        CCharEntity* PChar = PEntity->objtype == TYPE_PC ? static_cast<CCharEntity*>(PEntity) : nullptr;
+
         for (auto&& PTrait : *traitList)
         {
             if (level >= PTrait->getLevel() && PTrait->getLevel() > 0)
@@ -4888,6 +4918,24 @@ namespace battleutils
 
                     if (PExistingTrait->getID() == PTrait->getID())
                     {
+                        // Check if we still have the merit required for this trait
+                        if (PChar)
+                        {
+                            if (PExistingTrait->getMeritID() > 0)
+                            {
+                                if (PChar->PMeritPoints->GetMerit((MERIT_TYPE)PExistingTrait->getMeritID())->count == 0)
+                                {
+                                    PEntity->delTrait(PExistingTrait);
+                                    break;
+                                }
+                                else if (PExistingTrait->getMeritID() == PTrait->getMeritID())
+                                {
+                                    add = false;
+                                    break;
+                                }
+                            }
+                        }
+
                         if (PExistingTrait->getRank() < PTrait->getRank())
                         {
                             PEntity->delTrait(PExistingTrait);
@@ -4905,6 +4953,16 @@ namespace battleutils
                         }
                     }
                 }
+
+                // Don't add traits that aren't merited yet
+                if (PChar)
+                {
+                    if (PTrait->getMeritID() > 0 && PChar->PMeritPoints->GetMerit((MERIT_TYPE)PTrait->getMeritID())->count == 0)
+                    {
+                        add = false;
+                    }
+                }
+
                 if (add)
                 {
                     PEntity->addTrait(PTrait);

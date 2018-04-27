@@ -52,9 +52,9 @@ function onRegionEnter(player,region)
             SendEntityVisualPacket(DANGRUF_GEYSER_OFFSET + 2, "kkj3");
         end,
     }
-    if (player:hasKeyItem(BLUE_ACIDITY_TESTER)) then
-        player:delKeyItem(BLUE_ACIDITY_TESTER);
-        player:addKeyItem(RED_ACIDITY_TESTER);
+    if (player:hasKeyItem(dsp.kis.BLUE_ACIDITY_TESTER)) then
+        player:delKeyItem(dsp.kis.BLUE_ACIDITY_TESTER);
+        player:addKeyItem(dsp.kis.RED_ACIDITY_TESTER);
     end
 end;
 
@@ -65,6 +65,15 @@ function onEventUpdate(player,csid,option)
 end;
 
 function onEventFinish(player,csid,option)
+end;
+
+function onGameHour(zone)
+    local nm = GetMobByID(GEYSER_LIZARD);
+    local pop = nm:getLocalVar("pop");
+    if (os.time() > pop and not nm:isSpawned()) then
+        UpdateNMSpawnPoint(GEYSER_LIZARD);
+        nm:spawn();
+    end
 end;
 
 function onZoneWeatherChange(weather)
