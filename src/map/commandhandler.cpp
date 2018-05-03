@@ -137,10 +137,10 @@ int32 CCommandHandler::call(CCharEntity* PChar, const int8* commandline)
             Sql_EscapeString(SqlHandle, escaped_name, PChar->name.c_str());
 
             std::string escaped_gm_cmd; escaped_gm_cmd.reserve(cmdname.length() * 2 + 1);
-            Sql_EscapeString(SqlHandle, escaped_gm_cmd.data(), (char*)cmdname.c_str());
+            Sql_EscapeString(SqlHandle, &escaped_gm_cmd.front(), (const char*)cmdname.c_str());
 
             std::string escaped_full_string; escaped_full_string.reserve(strlen((char*)commandline) * 2 + 1);
-            Sql_EscapeString(SqlHandle, escaped_full_string.data(), (char*)commandline);
+            Sql_EscapeString(SqlHandle, &escaped_full_string.front(), (const char*)commandline);
 
             const char* fmtQuery = "INSERT into audit_gm (date_time,gm_name,command,full_string) VALUES(current_timestamp(),'%s','%s','%s')";
             if (Sql_Query(SqlHandle, fmtQuery, escaped_name, escaped_gm_cmd.data(), escaped_full_string.data()) == SQL_ERROR)

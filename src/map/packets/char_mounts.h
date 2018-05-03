@@ -40,7 +40,13 @@ class CCharMountsPacket : public CBasicPacket
 {
 public:
 
-    CCharMountsPacket(CCharEntity* PChar);
+    CCharMountsPacket(CCharEntity* PChar)
+    {
+        this->type = 0xAE;
+        this->size = 0x06;
+
+        memcpy(data+(0x04), &(PChar->keys.tables[6].keyList), 0x0C);
+    }
 };
 
 #endif
